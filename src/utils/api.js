@@ -10,10 +10,10 @@ export const postNewExchange = (newExchange) => {
   });
 };
 
-export const getExchanges = (topic, sort_by) => {
-  return request.get("/exchangehistory").then(({ data: { transaction } }) => {
-    return transaction;
-  });
+export const getExchanges = (order) => {
+  return request
+    .get("/exchangehistory", { params: { order } })
+    .then(({ data: { transaction } }) => {
+      return transaction;
+    });
 };
-
-// { params: { sort_by } }

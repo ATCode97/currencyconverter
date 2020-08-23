@@ -32,7 +32,7 @@ class Converter extends Component {
       foreign_currency: this.state.convertTo,
       amount: this.state.result,
     };
-    console.log(newExchange);
+
     api.postNewExchange(newExchange);
 
     this.calculate();
@@ -42,11 +42,12 @@ class Converter extends Component {
     const amount = this.state.amountToConvert;
     if (amount === isNaN) {
       return;
+    } else if (amount > 999999) {
+      alert("exceed maximum value");
     } else {
       fetch(`https://api.exchangeratesapi.io/latest?base=${this.state.base}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           const date = data.date;
           const result = (data.rates[this.state.convertTo] * amount).toFixed(2);
           this.setState({
@@ -78,11 +79,13 @@ class Converter extends Component {
                   <input
                     value={amountToConvert}
                     onChange={this.handleInput}
+                    onKeyPress={this.handleKey}
                     className="form-control form-control-lg mx-3"
                     type="number"
                     min="1"
                     max="999,999"
                   />
+
                   <select
                     name="convertTo"
                     value={convertTo}
@@ -118,7 +121,6 @@ class Converter extends Component {
                 <Button onClick={this.handleClick} className="exchange">
                   Exchange
                 </Button>
-                <Button onSubmit={this.handleClick2}>Save</Button>
               </div>
             </div>
           </div>
